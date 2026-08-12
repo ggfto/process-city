@@ -1,0 +1,44 @@
+services:
+  process-city:
+    build: .
+    container_name: process-city
+    restart: unless-stopped
+
+    # ver os processos do HOST, nao os do container: sem pid:host o /proc do
+    # container mostra so o proprio python e a cidade fica com 1 predio
+    pid: host
+
+    # network_mode host da (a) contadores de rede reais da maquina e
+    # (b) as portas 8765/8080 direto, sem NAT
+    network_mode: host
+
+    # so leitura de /proc; nada aqui permite matar ou alterar processo
+    cap_drop: [ALL]
+    cap_add:
+      - SYS_PTRACE   # ler /proc/<pid>/io de processos de outros usuarios
+    security_opt:
+      - apparmor:unconfined
+
+    # sem o passwd do host, psutil resolve os UIDs contra o /etc/passwd do
+    # container e todo usuario vira numero ("1000" em vez de "deploy")
+    volumes:
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+
+    environment:
+      PYTHONUNBUFFERED: "1"
+
+    # com network_mode: host as portas sao as do host -- 8080 costuma estar
+    # ocupada (Portainer, txAdmin e cia), entao a UI vai na 8099
+    command:
+      - python
+      - /app/agent/server.py
+      - --host=0.0.0.0
+      - --port=8765
+      - --static=/app/web
+      - --http-port=8099
+      - --interval=1
+      - --top=400
+      # num servidor ~80% dos pids sao threads de kernel; sem elas a cidade
+      # fica com meia duzia de torres soltas
+      - --kthreads

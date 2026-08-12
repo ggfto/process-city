@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Process City</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <!-- barra de estatisticas do host -->
+    <header id="stats">
+      <div class="stat"><label>PROCESSES</label><span id="s-procs">--</span></div>
+      <div class="stat"><label>CPU USAGE</label><span id="s-cpu" class="c-cyan">--</span></div>
+      <div class="stat"><label>MEMORY USAGE</label><span id="s-mem" class="c-magenta">--</span></div>
+      <div class="stat"><label>NETWORK I/O</label><span id="s-net" class="c-green">--</span></div>
+      <div class="stat right"><label>LINK</label><span id="s-link" class="c-amber">...</span></div>
+    </header>
+
+    <!-- painel lateral -->
+    <aside id="side">
+      <section class="panel">
+        <h2>PROCESS DETAILS</h2>
+        <dl id="details">
+          <div><dt>Process</dt><dd id="d-name">—</dd></div>
+          <div><dt>PID</dt><dd id="d-pid">—</dd></div>
+          <div><dt>User</dt><dd id="d-user">—</dd></div>
+          <div><dt>CPU</dt><dd id="d-cpu">—</dd></div>
+          <div><dt>Memory</dt><dd id="d-mem">—</dd></div>
+          <div><dt>Threads</dt><dd id="d-thr">—</dd></div>
+          <div><dt>Net</dt><dd id="d-net">—</dd></div>
+          <div><dt>Disk</dt><dd id="d-io">—</dd></div>
+          <div><dt>Status</dt><dd id="d-status">—</dd></div>
+          <div><dt>Uptime</dt><dd id="d-up">—</dd></div>
+        </dl>
+      </section>
+      <section class="panel">
+        <h2>TOP PROCESSES</h2>
+        <ol id="top"></ol>
+      </section>
+    </aside>
+
+    <div id="labels"></div>
+    <footer id="hint">arraste = orbitar · scroll = zoom · clique = inspecionar</footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
